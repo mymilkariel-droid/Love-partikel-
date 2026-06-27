@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Heart Particles</title>
+
+<style>
+html,body{
+margin:0;
+overflow:hidden;
+background:black;
+}
+
+canvas{
+display:block;
+}
+</style>
+
+</head>
+
+<body>
+
+<canvas id="c"></canvas>
+
+<script>
+
+const canvas=document.getElementById("c");
+const ctx=canvas.getContext("2d");
+
+resize();
+
+window.onresize=resize;
+
+function resize(){
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+}
+
+const particles=[];
+
+for(let i=0;i<500;i++){
+
+particles.push({
+
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+
+vx:(Math.random()-0.5)*2,
+vy:(Math.random()-0.5)*2,
+
+size:Math.random()*5+2
+
+});
+
+}
+
+function heart(x,y,s){
+
+ctx.save();
+
+ctx.translate(x,y);
+
+ctx.scale(s,s);
+
+ctx.beginPath();
+
+ctx.moveTo(0,0);
+
+ctx.bezierCurveTo(-25,-25,-50,15,0,50);
+
+ctx.bezierCurveTo(50,15,25,-25,0,0);
+
+ctx.fillStyle="red";
+
+ctx.fill();
+
+ctx.restore();
+
+}
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+ctx.fillStyle="rgba(0,0,0,.15)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+for(let p of particles){
+
+p.x+=p.vx;
+p.y+=p.vy;
+
+if(p.x<0||p.x>canvas.width)p.vx*=-1;
+if(p.y<0||p.y>canvas.height)p.vy*=-1;
+
+heart(p.x,p.y,p.size/20);
+
+}
+
+}
+
+animate();
+
+</script>
+
+</body>
+  </html>
